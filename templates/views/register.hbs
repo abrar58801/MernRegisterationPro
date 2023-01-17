@@ -1,0 +1,51 @@
+{{>menu}}
+<div class="form_wrapper">
+  <div class="form_container">
+    <div class="title_container">
+      <h2>Registration Form</h2>
+    </div>
+    <div class="row clearfix">
+      <div class="">
+        <form action="/user_register" method="POST">
+          <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
+            <input type="email" name="email" placeholder="Email" />
+          </div>
+          <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
+            <input type="password" name="password" placeholder="Password"  />
+          </div>
+          <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
+            <input type="password" name="c_password" placeholder="Conform Password"  />
+          </div>
+          <div class="row clearfix">
+            <div class="col_half">
+              <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                <input type="text" name="f_name" placeholder="First Name" />
+              </div>
+            </div>
+            <div class="col_half">
+              <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                <input type="text" name="l_name" placeholder="Last Name"  />
+              </div>
+            </div>
+            
+              <div class="input_field">
+                <input type="number" name="phone" placeholder="Phone" />
+              </div>
+              <div class="input_field"> 
+                <input type="number" name="age" placeholder="Your Age"  />
+              </div>
+          </div>
+          <div class="input_field radio_option">
+            <input type="radio" name="gender" id="rd1" value="male">
+            <label for="rd1">Male</label>
+            <input type="radio" name="gender" id="rd2" value="female">
+            <label for="rd2">Female</label>
+          </div>
+          </div>
+          <input class="button" type="submit" value="Register" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
