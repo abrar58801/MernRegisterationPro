@@ -4,6 +4,8 @@ const path = require("path");
 const app = express();
 const hbs = require("hbs");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const auth = require("./middleware/auth");
 
 
 require("./db/conn");
@@ -17,6 +19,7 @@ const template_path = path.join(__dirname, "../templates/views");
 const partials_path = path.join(__dirname, "../templates/partials");
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({extended:false}));
 
 app.use(express.static(static_path));
@@ -30,7 +33,35 @@ app.get("/", (req, res) =>{
     res.render("index");
 });
 
-app.get("/register", (req, res) =>{
+app.get("/secret", auth , (req, res) => {    
+    // console.log(`this is cookies ${req.cookies.jwt}`);
+    res.render("secret");
+});
+
+app.get("/logout", auth , async(req, res) => {  
+    try {
+        console.log(req.user);
+
+        // logout for single divice
+        // req.user.tokens = req.user.tokens.filter((currElement) => {
+        //     return currElement.token === req.token
+        // })
+
+        // logout for All divice
+        req.user.tokens = [];
+
+        res.clearCookie("jwt");
+        console.log("Logout Successfully");
+
+        await req.user.save();
+        res.render("login");
+
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+app.get("/register", (req, res) => {
     res.render("register");
 });
 
@@ -59,6 +90,11 @@ app.post("/user_register", async (req, res) =>{
 
             const token = await registerUser.generateAutoToken();
             console.log("the token part" + token);
+            
+            res.cookie("jwt", token, {
+                expires: new Date(Date.now() + 60000),
+                httpOnly:true,
+            });
 
             const registered = registerUser.save();
             res.status(201).render("login");
@@ -82,6 +118,13 @@ app.post("/login", async (req, res) => {
 
         const token = await useremail.generateAutoToken();
         console.log("the token part" + token);
+
+        res.cookie("jwt", token, {
+            expires:new Date(Date.now() + 60000),
+            httpOnly:true,
+            // secure:true
+        });
+
 
         if(isMatch){
             res.status(201).render("index");
